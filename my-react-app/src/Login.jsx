@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {auth} from './firebase';
 import { signInWithEmailAndPassword } from "firebase/auth";
 
+
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -19,6 +20,8 @@ const Login = () => {
         try {
             await signInWithEmailAndPassword(auth, email, password)
             console.log('User logged in');
+            alert('User logged in')
+            window.location.href = '/userProfile';
         } catch (error) {
             console.log(error.message);
         }

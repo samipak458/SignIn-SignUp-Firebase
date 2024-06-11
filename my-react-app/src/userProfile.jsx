@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { db } from './firebase';
 import { collection, doc, getDocs, onSnapshot } from "firebase/firestore"; 
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 
 const UserProfile = ({ username, email, advance }) => {
@@ -24,24 +24,21 @@ const UserProfile = ({ username, email, advance }) => {
                     setUserData(userData);
                 });
             } else {
-                alert('No user is signed in');
+                console.log('No user is signed in');
             }
         });
         }, []);
-    //     const fetchData = async () => {   
-    //         //const querySnapshot = await getDocs(db, "users");  
-    //         //const docRef = doc(db, "users");
-    //         const querySnapshot = await getDocs(collection(db, "users"));
-        
-           
-    //         const usersData = querySnapshot.docs.map(doc => doc.data());
-    //         setUserData(usersData);
-    //     };
-    
 
-       
-    //     fetchData();
-    // }, []);
+    const handleSignOut = () => { 
+        const auth = getAuth();
+        signOut(auth).then(() => {
+            console.log('User signed out');
+            window.location.href = '/login';
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+   
 
     return (
         <div>
@@ -53,8 +50,12 @@ const UserProfile = ({ username, email, advance }) => {
                     <p>Subscribed: {userData.paid}</p>
                 </div>
             )}
+
+            <button onClick={handleSignOut}>Sign Out</button>
         </div>
     );
 };
+
+
 
 export default UserProfile;

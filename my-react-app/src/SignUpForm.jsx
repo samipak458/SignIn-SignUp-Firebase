@@ -22,25 +22,7 @@ function SignUpForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // try {
-        //     // authentication to create user through email and password
-        //     await createUserWithEmailAndPassword(auth, email, password)
-        //     console.log('User created');
-
-        //     // add user to firestore (database)
-        //     const docRef = await addDoc(collection(db, "users", ), {
-        //         username: username,
-        //         email: email,
-        //         paid: "No",
-        //         history: []
-        //     });
-
-        //     console.log("Document written with ID: ", docRef.id);
-
-
-        // } catch (error) {
-        //     console.log(error.message);
-        // }
+       
 
         await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
             return setDoc(doc(db, 'users', userCredential.user.uid), {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {auth, db} from './firebase';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore"; 
+import { collection, setDoc, doc, addDoc } from "firebase/firestore"; 
 
 function SignUpForm() {
     const [email, setEmail] = useState('');
@@ -22,25 +22,44 @@ function SignUpForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            // authentication to create user through email and password
-            await createUserWithEmailAndPassword(auth, email, password)
-            console.log('User created');
+        // try {
+        //     // authentication to create user through email and password
+        //     await createUserWithEmailAndPassword(auth, email, password)
+        //     console.log('User created');
 
-            // add user to firestore (database)
-            const docRef = await addDoc(collection(db, "users"), {
+        //     // add user to firestore (database)
+        //     const docRef = await addDoc(collection(db, "users", ), {
+        //         username: username,
+        //         email: email,
+        //         paid: "No",
+        //         history: []
+        //     });
+
+        //     console.log("Document written with ID: ", docRef.id);
+
+
+        // } catch (error) {
+        //     console.log(error.message);
+        // }
+
+        await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+            return setDoc(doc(db, 'users', userCredential.user.uid), {
                 username: username,
                 email: email,
                 paid: "No",
                 history: []
-            });
-
-            console.log("Document written with ID: ", docRef.id);
-
-
-        } catch (error) {
-            console.log(error.message);
-        }
+            })
+        }).then(() => {
+            alert('Account created Successfully success!')
+            console.log('Account created Successfully success!');
+            window.location.href = '/login';
+        }).catch(err => {
+            console.log(err.message);
+            alert("Cannot Signup "+ err.message);
+        }).catch(err => {
+            console.log(err.message);
+            alert("Cannot Signup "+ err.message);
+        });
     };
 
     return (

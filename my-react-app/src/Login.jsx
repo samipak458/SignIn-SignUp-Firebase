@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { auth } from './firebase';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import GoogleSignInButton from './GoogleSignInButton';
+import { auth, googleProvider } from './firebase';
+import { signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail } from 'firebase/auth';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -24,6 +23,33 @@ const Login = () => {
       window.location.href = '/userProfile';
     } catch (error) {
       console.log(error.message);
+      alert('Error logging in: ' + error.message);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      console.log('User logged in with Google');
+      alert('User logged in with Google');
+      window.location.href = '/userProfile';
+    } catch (error) {
+      console.log(error.message);
+      alert('Error logging in with Google: ' + error.message);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      alert('Please enter your email address.');
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      alert('Password reset email sent!');
+    } catch (error) {
+      console.log(error.message);
+      alert('Error sending password reset email: ' + error.message);
     }
   };
 
@@ -38,11 +64,13 @@ const Login = () => {
         <input type="password" value={password} onChange={handlePasswordChange} />
         <br />
         <button type="submit">Login</button>
-        <br />
-        <GoogleSignInButton />
-        <br />
-        <p>Not registered? <a href="/signup">SignUp</a></p>
       </form>
+      <br />
+      <button onClick={handleGoogleSignIn}>Sign in with Google</button>
+      <br />
+      <button type="button" onClick={handleForgotPassword}>Forgot Password?</button>
+      <br />
+      <p>Not registered? <a href="/signup">SignUp</a></p>
     </div>
   );
 };

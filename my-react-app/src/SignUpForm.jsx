@@ -29,7 +29,8 @@ function SignUpForm() {
                 username: username,
                 email: email,
                 paid: "No",
-                history: []
+                prompt: "No prompt yet",     // new object to save prompt message
+                history: "No history yet"    // new object to save summarized history 
             })
         }).then(() => {
             alert('Account created Successfully success!')

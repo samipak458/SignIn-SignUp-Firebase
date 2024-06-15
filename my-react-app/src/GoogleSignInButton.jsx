@@ -15,7 +15,8 @@ const GoogleSignInButton = () => {
         username: user.displayName,
         email: user.email,
         paid: "No",
-        history: []
+        prompt: "No prompt yet",     // new object to save prompt message
+        history: "No history yet"    // new object to save summarized history  
       }, { merge: true });  // merge: true to avoid overwriting existing data
 
       console.log('User logged in with Google:', user);
